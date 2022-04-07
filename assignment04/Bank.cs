@@ -1,12 +1,11 @@
-using System.Collections;
 using assignment04.Account;
 
 namespace assignment04;
 
 public static class Bank
 {
-    public static readonly Dictionary<string, Account> ACCOUNTS;
-    public static readonly Dictionary<string, Person> USERS;
+    public static readonly Dictionary<string, Account.Account> Accounts;
+    public static readonly Dictionary<string, Person> Users;
 
     static Bank()
     {
@@ -29,7 +28,7 @@ public static class Bank
         AddAccount(new SavingAccount(5000)); //SV-100002
         AddAccount(new SavingAccount()); //SV-100003
         AddAccount(new CheckingAccount(2000)); //CK-100004
-        AddAccount(new CheckingAccount(1500, true));//CK-100005
+        AddAccount(new CheckingAccount(1500, true)); //CK-100005
         AddAccount(new VisaAccount(50, -550)); //VS-100006
         AddAccount(new SavingAccount(1000)); //SV-100007
 
@@ -66,31 +65,31 @@ public static class Bank
 
     public static Person GetPerson(string name)
     {
-        if (USERS.ContainsKey(name))
+        if (Users.ContainsKey(name))
         {
-            return USERS[name];
+            return Users[name];
         }
         else
         {
-            throw new AccountException(AccountEnum.USER_DOES_NOT_EXIST);
+            throw new AccountException(AccountEnum.UserDoesNotExist);
         }
     }
 
-    public static Account GetAccount(string number)
+    public static Account.Account GetAccount(string number)
     {
-        if (ACCOUNTS.ContainsKey(number))
+        if (Accounts.ContainsKey(number))
         {
-            return ACCOUNTS[number];
+            return Accounts[number];
         }
         else
         {
-            throw new AccountException(AccountEnum.ACCOUNT_DOES_NOT_EXIST);
+            throw new AccountException(AccountEnum.AccountDoesNotExist);
         }
     }
 
     public static void PrintPersons()
     {
-        foreach (var user in USERS)
+        foreach (var user in Users)
         {
             Console.WriteLine(user);
         }
@@ -98,7 +97,7 @@ public static class Bank
 
     public static void PrintAccounts()
     {
-        foreach (var account in ACCOUNTS)
+        foreach (var account in Accounts)
         {
             Console.WriteLine(account);
         }
@@ -106,26 +105,27 @@ public static class Bank
 
     public static void AddPerson(string name, string sin)
     {
-        Person person = new Person(name, sin);
+        var person = new Person(name, sin);
 
+        // TODO : Fix logger
         person.OnLogin += Logger.LoginHandler();
 
-        USERS.Add(name, person);
+        Users.Add(name, person);
     }
 
-    public static void AddAccount(Account account)
+    public static void AddAccount(Account.Account account)
     {
+        // TODO : Fix logger
         account.OnTransaction += Logger.TransactionHandler();
 
-        ACCOUNTS.Add(account.Number, account);
+        Accounts.Add(account.Number, account);
     }
 
     public static void AddUserToAccount(string number, string name)
     {
-        Account account = ACCOUNTS[number];
-        Person person = USERS[name];
+        var account = Accounts[number];
+        var person = Users[name];
 
         account.addUser(person);
     }
-}
 }

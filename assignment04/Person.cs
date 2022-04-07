@@ -1,5 +1,6 @@
 using System.Collections;
 using assignment04.Account;
+using assignment04.Transaction;
 
 namespace assignment04;
 
@@ -28,17 +29,18 @@ namespace assignment04;
 
             OnLogin.Invoke(this, new EventArgs());
 
+            //TODO: Fix eventArgs
             LoginEventArgs(this, false);
 
-            AccountException Exception = new AccountException(AccountEnum.PASSWORD_INCORRECT);
+            throw new AccountException(AccountEnum.PasswordIncorrect);
 
-            return Exception;
         }
         else if (this.password == password)
         {
             IsAuthenticated = true;
 
-            OnLogin.Invoke(this, new EventArgs());
+            OnLogin.Invoke(this, EventArgs.Empty);
+            //TODO: Fix eventArgs
 
             LoginEventArgs(this, true);
         }

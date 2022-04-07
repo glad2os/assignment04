@@ -168,9 +168,9 @@ catch (AccountException e)
 Console.WriteLine("\n\nAll transactions");
 foreach (var transaction in Bank.GetAllTransactions())
     Console.WriteLine(transaction);
-foreach (var keyValuePair in Bank.ACCOUNTS)
+
+foreach (var account in Bank.Accounts.Select(keyValuePair => keyValuePair.Value))
 {
-    Account account = keyValuePair.Value;
     Console.WriteLine("\nBefore PrepareMonthlyReport()");
     Console.WriteLine(account);
 

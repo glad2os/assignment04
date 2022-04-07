@@ -1,7 +1,7 @@
 using System.Collections;
 using assignment04.Account;
 
-namespace assignment04 { 
+namespace assignment04;
 
 public static class Bank
 {
@@ -72,8 +72,7 @@ public static class Bank
         }
         else
         {
-            AccountException exception = new AccountException(AccountEnum.USER_DOES_NOT_EXIST);
-            return exception;
+            throw new AccountException(AccountEnum.USER_DOES_NOT_EXIST);
         }
     }
 
@@ -85,8 +84,7 @@ public static class Bank
         }
         else
         {
-            AccountException exception = new AccountException(AccountEnum.ACCOUNT_DOES_NOT_EXIST);
-            return exception;
+            throw new AccountException(AccountEnum.ACCOUNT_DOES_NOT_EXIST);
         }
     }
 

@@ -1,14 +1,40 @@
-namespace assignment04.Account;
-
-public class VisaAccount : Account
+namespace assignment04.Account 
 {
-    public void Pay(int p0, Person p1)
-    {
-        throw new NotImplementedException();
-    }
 
-    public void Purchase(double p0, Person p1)
+    public class VisaAccount : Account
     {
-        throw new NotImplementedException();
+        private double creditLimit;
+        private static double INTEREST_RATE = 0.1995;
+        private const int MONTH = 12;
+
+        public VisaAccount(double balance = 0, double creditLimit = 1200) : base("VS-", balance)
+        {
+            this.creditLimit = creditLimit;
+        }
+
+        public void DoPayment(double amount, Person person)
+        {
+            base.Deposit(amount, person);
+        }
+
+
+        public void DoPurchase(double amount, Person person)
+        {
+            if (!this.IsUser(person.Name)) throw new AccountException(AccountException.ExceptionEnum.NAME_NOT_ASSOCIATED_WITH_ACCOUNT);
+            if (!person.IsAuthenticated) throw new AccountException(AccountException.ExceptionEnum.USER_NOT_LOGGED_IN);
+            if (amount > this.Balance) throw new AccountException(AccountException.ExceptionEnum.CREDIT_LIMIT_HAS_BEEN_EXCEEDED);
+            this.Deposit(-amount, person);
+        }
+
+        public override void PrepareMonthlyStatement()
+        {
+            double interest = LowestBalance * (INTEREST_RATE / MONTH);
+            this.Balance -= interest;
+            this.transactions.Clear();
+        }
+        public void Withdraw(double amount, Person person)
+        {
+
+        }
     }
 }

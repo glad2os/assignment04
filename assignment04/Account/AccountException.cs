@@ -2,7 +2,7 @@ namespace assignment04.Account;
 
 public class AccountException : System.Exception
 {
-    public AccountException(string message)
+    public AccountException(AccountEnum message)
     {
         Message = message;
     }

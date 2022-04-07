@@ -1,9 +1,11 @@
 namespace assignment04.Account;
 
-public class AccountException
+public class AccountException : System.Exception
 {
-    public AccountException()
+    public AccountException(string message)
     {
-        // my new con
+        Message = message;
     }
+
+    public override string Message { get; }
 }

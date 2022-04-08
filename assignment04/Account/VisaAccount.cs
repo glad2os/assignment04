@@ -5,7 +5,7 @@ namespace assignment04.Account
     {
         private double creditLimit;
         private static double INTEREST_RATE = 0.1995;
-        private const int MONTH = 12;
+        private const int Month = 12;
 
         public VisaAccount(double balance = 0, double creditLimit = 1200) : base("VS-", balance)
         {
@@ -26,9 +26,9 @@ namespace assignment04.Account
             this.Deposit(-amount, person);
         }
 
-        public override void PrepareMonthlyStatement()
+        public void PrepareMonthlyStatement()
         {
-            double interest = LowestBalance * (INTEREST_RATE / MONTH);
+            double interest = LowestBalance * (INTEREST_RATE / Month);
             this.Balance -= interest;
             this.transactions.Clear();
         }

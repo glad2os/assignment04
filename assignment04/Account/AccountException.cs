@@ -1,9 +1,10 @@
 namespace assignment04.Account;
 
-public class AccountException
+public class AccountException : Exception
 {
-    public AccountException()
+    public AccountException(ExceptionType reason)
     {
-        // my new con
+        : base(Enum.GetName(typeof(ExceptionType), reason))
+        { }
     }
 }

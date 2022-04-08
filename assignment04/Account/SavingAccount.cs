@@ -1,3 +1,5 @@
+using assignment04.Exception;
+
 namespace assignment04.Account 
 { 
 
@@ -14,9 +16,9 @@ public class SavingAccount : Account
 
     public void Withdraw(double amount, Person person)
     {
-        if (!this.IsUser(person.Name)) throw new AccountException(AccountException.ExceptionEnum.NAME_NOT_ASSOCIATED_WITH_ACCOUNT);
-        if (!person.IsAuthenticated) throw new AccountException(AccountException.ExceptionEnum.USER_NOT_LOGGED_IN);
-        if (this.Balance < amount) throw new AccountException(AccountException.ExceptionEnum.CREDIT_LIMIT_HAS_BEEN_EXCEEDED);
+        if (!this.IsUser(person.Name)) throw new AccountException(ExceptionEnum.NAME_NOT_ASSOCIATED_WITH_ACCOUNT);
+        if (!person.IsAuthenticated) throw new AccountException(ExceptionEnum.USER_NOT_LOGGED_IN);
+        if (this.Balance < amount) throw new AccountException(ExceptionEnum.CREDIT_LIMIT_HAS_BEEN_EXCEEDED);
         base.Deposit(-amount, person);
 
     }
@@ -25,7 +27,7 @@ public class SavingAccount : Account
     {
         base.Deposit(amount, person);
     }
-    public override void PrepareMonthlyStatement()
+    public void PrepareMonthlyStatement()
     {
         var serviceFee = this.transactions.Count * COST_PER_TRANSACTION;
         var interest = this.LowestBalance * (INTEREST_RATE / MONTH);

@@ -1,3 +1,5 @@
+using assignment04.Exception;
+
 namespace assignment04.Account 
 {
 
@@ -5,7 +7,7 @@ namespace assignment04.Account
     {
         private static double COST_PER_TRANSACTION = 0.05;
         private static double INTEREST_RATE = 0.005;
-        private const int MONTH = 12;
+        private const int Month = 12;
         private bool hasOverdraft;
 
         public CheckingAccount(double balance = 0, bool hasOverdraft = false) : base("CK-", balance)
@@ -17,17 +19,17 @@ namespace assignment04.Account
         {
             if (!base.IsUser(person.Name))
             {
-                throw new AccountException(AccountException.ExceptionEnum.NAME_NOT_ASSOCIATED_WITH_ACCOUNT);
+                throw new AccountException(ExceptionEnum.NAME_NOT_ASSOCIATED_WITH_ACCOUNT);
             }
 
             if (!person.IsAuthenticated)
             {
-                throw new AccountException(AccountException.ExceptionEnum.USER_NOT_LOGGED_IN);
+                throw new AccountException(ExceptionEnum.USER_NOT_LOGGED_IN);
             }
 
             if (base.Balance < amount)
             {
-                throw new AccountException(AccountException.ExceptionEnum.NO_OVERDRAFT);
+                throw new AccountException(ExceptionEnum.NO_OVERDRAFT);
             }
 
             Deposit(amount, person);
@@ -38,10 +40,10 @@ namespace assignment04.Account
         {
             base.Deposit(amount, person);
         }
-        public override void PrepareMonthlyStatement()
+        public void PrepareMonthlyStatement()
         {
             var serviceFee = base.transactions.Count * COST_PER_TRANSACTION;
-            var interest = base.Balance * (INTEREST_RATE / MONTH);
+            var interest = base.Balance * (INTEREST_RATE / Month);
             this.Balance += this.Balance + interest - serviceFee;
             this.transactions.Clear();
         }

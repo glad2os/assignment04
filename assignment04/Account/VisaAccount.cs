@@ -5,7 +5,7 @@ namespace assignment04.Account
     {
         private double creditLimit;
         private static double INTEREST_RATE = 0.1995;
-        private const int Month = 12;
+        private const int MONTH = 12;
 
         public VisaAccount(double balance = 0, double creditLimit = 1200) : base("VS-", balance)
         {
@@ -15,26 +15,39 @@ namespace assignment04.Account
         public void DoPayment(double amount, Person person)
         {
             base.Deposit(amount, person);
+            base.OnTransactionOccur(amount, person);
         }
-
 
         public void DoPurchase(double amount, Person person)
         {
-            if (!this.IsUser(person.Name)) throw new AccountException(AccountException.ExceptionEnum.NAME_NOT_ASSOCIATED_WITH_ACCOUNT);
-            if (!person.IsAuthenticated) throw new AccountException(AccountException.ExceptionEnum.USER_NOT_LOGGED_IN);
-            if (amount > this.Balance) throw new AccountException(AccountException.ExceptionEnum.CREDIT_LIMIT_HAS_BEEN_EXCEEDED);
-            this.Deposit(-amount, person);
+            foreach (var item in base.users) 
+            { 
+                if (person.Name != item.Name) 
+                { 
+                    throw new AccountException(ExceptionEnum.NAME_NOT_ASSOCIATED_WITH_ACCOUNT);
+                } 
+                else if (person.IsAuthenticated == false) 
+                { 
+                    throw new AccountException(ExceptionEnum.USER_NOT_LOGGED_IN);
+                } 
+                else if (amount > CreditLimit) 
+                { 
+                    throw new AccountException(ExceptionEnum.CREDIT_LIMIT_HAS_BEEN_EXCEEDED);
+                } 
+                else 
+                { 
+                    base.Deposit(-amount, person);
+                } 
+            }
         }
 
-        public void PrepareMonthlyStatement()
+        
+        public override void PrepareMonthlyReport()
         {
-            double interest = LowestBalance * (INTEREST_RATE / Month);
-            this.Balance -= interest;
-            this.transactions.Clear();
-        }
-        public void Withdraw(double amount, Person person)
-        {
-
+            double interests;
+            interests = INTEREST_RATE * LowestBalance / 12;
+            Balance = Balance - interests;
+            transactions.Clear();
         }
     }
 }

@@ -1,51 +1,48 @@
-using System.Xml.Schema;
-
 namespace assignment04.Account;
 
 public abstract class Account
 {
-    private static int LAST_NUMBER = 100_000;
+    private static readonly int LAST_NUMBER = 100_000;
+    public readonly List<Transaction.Transaction> transactions;
     protected readonly List<Person> users;
-    public readonly List<Transaction> transactions;
 
     public EventHandler<EventArgs> OnTransaction;
-    
-    public string Number { get; }
-    public double Balance { get; protected set; }
-    public double LowestBalance { get; protected set; }
 
     public Account(string type, double balance)
     {
         Number = type + "-" + LAST_NUMBER;
         Balance = balance;
+        //TODO: ????
+        OnTransaction = onTransaction;
         LowestBalance = balance;
-        transactions = new List<Transaction>();
+        transactions = new List<Transaction.Transaction>();
         users = new List<Person>();
     }
+
+    public string Number { get; }
+    public double Balance { get; protected set; }
+    public double LowestBalance { get; protected set; }
 
     public void Deposit(double amount, Person person)
     {
         Balance += amount;
         LowestBalance = Balance;
-        transactions.Add(new Transaction(AccountNumber = Number, Amount = amount, Originator = person));
+        transactions.Add(new Transaction.Transaction(Number, amount, person, new DayTime()));
     }
 
-    public void AddUser(Person person)
+    public void addUser(Person person)
     {
         users.Add(person);
     }
 
     public bool IsUser(string name)
     {
-        var match = users.Any(x => name == users.Name);
-        if (match == true)
-            return true;
-        else
-            return false;
+        var match = users.Any(x => name == x.Name);
+        return match;
     }
 
     public abstract void PrepareMonthlyReport();
-    
+
     public virtual void OnTransactionOccur(object sender, EventArgs args)
     {
         OnTransaction(sender, args);
@@ -53,6 +50,18 @@ public abstract class Account
 
     public override string ToString()
     {
-        return $"{Number} {users.Name} {Balance:C} {transactions}";
+        return $"{Number} {users} {Balance:C} {transactions}";
+    }
+
+    public void Purchase(double p0, Person p3)
+    {
+        //TODO: method DoPurchase is not  the Purchase method (from document)
+        throw new NotImplementedException();
+    }
+
+    public void Pay(int p0, Person p1)
+    {
+        //TODO: Pay method is not the same as DoPayment method
+        throw new NotImplementedException();
     }
 }

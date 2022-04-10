@@ -175,7 +175,7 @@ foreach (var account in Bank.Accounts.Select(keyValuePair => keyValuePair.Value)
     Console.WriteLine(account);
 
     Console.WriteLine("\nAfter PrepareMonthlyReport()");
-    Account.PrepareMonthlyReport(); //all transactions are cleared, balance changes
+    account.PrepareMonthlyReport(); //all transactions are cleared, balance changes
     Console.WriteLine(account);
 }
 

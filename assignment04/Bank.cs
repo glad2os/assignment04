@@ -33,7 +33,7 @@ public static class Bank
         AddAccount(new SavingAccount(1000)); //SV-100007
 
         //associate users with accounts
-        string number = "VS-100000";
+        var number = "VS-100000";
         AddUserToAccount(number, "Narendra");
         AddUserToAccount(number, "Ilia");
         AddUserToAccount(number, "Mehrdad");
@@ -66,43 +66,38 @@ public static class Bank
     public static Person GetPerson(string name)
     {
         if (Users.ContainsKey(name))
-        {
             return Users[name];
-        }
-        else
-        {
-            throw new AccountException(AccountEnum.UserDoesNotExist);
-        }
+        //todo: implement new bankException or make the same as exception ExceptionEnum
+        /*
+         * AccountException(ExceptionEnum)
+         * you trying to pass AccountEnum
+         * explain me it
+         */
+        throw new AccountException(AccountEnum.UserDoesNotExist);
     }
 
     public static Account.Account GetAccount(string number)
     {
         if (Accounts.ContainsKey(number))
-        {
             return Accounts[number];
-        }
-        else
-        {
-            throw new AccountException(AccountEnum.AccountDoesNotExist);
-        }
+        //todo: implement new bankException or make the same as exception ExceptionEnum
+        /*
+         * AccountException(ExceptionEnum)
+         * you trying to pass AccountEnum
+         * explain me it
+         */
+        throw new AccountException(AccountEnum.AccountDoesNotExist);
     }
 
     public static void PrintPersons()
     {
-        foreach (var user in Users)
-        {
-            Console.WriteLine(user);
-        }
+        foreach (var user in Users) Console.WriteLine(user);
     }
 
     public static void PrintAccounts()
     {
-        foreach (var account in Accounts)
-        {
-            Console.WriteLine(account);
-        }
+        foreach (var account in Accounts) Console.WriteLine(account);
     }
-
     public static void AddPerson(string name, string sin)
     {
         var person = new Person(name, sin);
@@ -127,5 +122,11 @@ public static class Bank
         var person = Users[name];
 
         account.addUser(person);
+    }
+
+    public static IEnumerable<Transaction.Transaction> GetAllTransactions()
+    {
+        //TODO : @IM AN ONION MASON#3695 
+        throw new NotImplementedException();
     }
 }

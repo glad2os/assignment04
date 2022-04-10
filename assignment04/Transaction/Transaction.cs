@@ -14,7 +14,6 @@ public struct Transaction
         Originator = originator;
         Time = time;
     }
-
     public override string ToString()
     {
         //TODO: This method overrides the same method of the Object class.
@@ -22,7 +21,7 @@ public struct Transaction
         //the account number, name of the person, the amount, and the time that
         //this transition was completed. [See the output for clues for this method.]
         //You must include the word Deposit or Withdraw in the output.
-        
+
         return $"AccountNumber = {AccountNumber}, Amount={Amount}, Originator={Originator}, Time={Time}";
     }
 }

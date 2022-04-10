@@ -2,7 +2,7 @@ namespace assignment04;
 
 public struct DayTime
 {
-    private long minutes;
+    private readonly long minutes;
 
     public DayTime(long minutes)
     {
@@ -17,8 +17,8 @@ public struct DayTime
     public override string ToString()
     {
         // YYYY-MM-DD HH:mm
-        long month = minutes % 518_400 / 43_200;
-        string Month = Convert.ToInt32(month).ToString();
+        var month = minutes % 518_400 / 43_200;
+        var Month = Convert.ToInt32(month).ToString();
         if (Month.Length == 1)
             Month = "0" + Month;
         return $"{minutes / 518_400}-" +

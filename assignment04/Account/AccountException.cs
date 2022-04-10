@@ -1,10 +1,8 @@
 namespace assignment04.Account;
 
-public class AccountException : Exception
+public class AccountException : System.Exception
 {
-    public AccountException(ExceptionType reason)
-    {
-        : base(Enum.GetName(typeof(ExceptionType), reason))
-        { }
-    }
+    public AccountException(ExceptionEnum reason)
+        : base(Enum.GetName(typeof(ExceptionEnum), reason))
+    { }
 }

@@ -1,3 +1,5 @@
+using assignment04.Utils;
+
 namespace assignment04.Transaction;
 
 public struct Transaction
@@ -7,13 +9,14 @@ public struct Transaction
     public Person Originator { get; }
     public DayTime Time { get; }
 
-    public Transaction(string accountNumber, double amount, Person originator, DayTime time)
+    public Transaction(string accountNumber, double amount, Person person)
     {
         AccountNumber = accountNumber;
         Amount = amount;
-        Originator = originator;
-        Time = time;
+        Originator = person;
+        Time = Utils.Utils.Now;
     }
+
     public override string ToString()
     {
         //TODO: This method overrides the same method of the Object class.

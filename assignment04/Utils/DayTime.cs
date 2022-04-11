@@ -1,4 +1,4 @@
-namespace assignment04;
+namespace assignment04.Utils;
 
 public struct DayTime
 {

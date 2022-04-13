@@ -1,4 +1,5 @@
 using assignment04.Account;
+using assignment04.Exception;
 
 namespace assignment04;
 
@@ -67,13 +68,8 @@ public static class Bank
     {
         if (Users.ContainsKey(name))
             return Users[name];
-        //todo: implement new bankException or make the same as exception ExceptionEnum
-        /*
-         * AccountException(ExceptionEnum)
-         * you trying to pass AccountEnum
-         * explain me it
-         */
-        throw new AccountException(AccountEnum.UserDoesNotExist);
+ 
+        throw new AccountException(ExceptionEnum.USER_DOES_NOT_EXIST);
     }
 
     public static Account.Account GetAccount(string number)
@@ -86,7 +82,7 @@ public static class Bank
          * you trying to pass AccountEnum
          * explain me it
          */
-        throw new AccountException(AccountEnum.AccountDoesNotExist);
+        throw new AccountException(ExceptionEnum.ACCOUNT_DOES_NOT_EXIST);
     }
 
     public static void PrintPersons()

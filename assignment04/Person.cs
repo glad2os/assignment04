@@ -1,5 +1,6 @@
 using assignment04.Account;
 using assignment04.Transaction;
+using assignment04.Exception;
 
 namespace assignment04;
 
@@ -26,28 +27,16 @@ public class Person
         {
             IsAuthenticated = false;
 
-            OnLogin.Invoke(this, new EventArgs());
+            OnLogin.Invoke(this, new LoginEventArgs(this, false));
 
-            //TODO: Fix eventArgs
-            var loginEventArgs = new LoginEventArgs(Name, false);
-
-            //todo: implement exception
-            /*
-             * AccountException(ExceptionEnum)
-             * you trying to pass AccountEnum
-             * explain me it
-             */
-            throw new AccountException(AccountEnum.PasswordIncorrect);
+            throw new AccountException(ExceptionEnum.PASSWORD_INCORRECT);
         }
 
         if (this.password == password)
         {
             IsAuthenticated = true;
 
-            OnLogin.Invoke(this, EventArgs.Empty);
-            //TODO: Fix eventArgs
-
-            var loginEventArgs = new LoginEventArgs(Name, true);
+            OnLogin.Invoke(this, new LoginEventArgs(this, true));
         }
     }
 

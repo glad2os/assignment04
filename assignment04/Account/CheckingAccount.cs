@@ -19,18 +19,22 @@ namespace assignment04.Account
             {
                 if (person.Name != item.Name)
                 {
+                    base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, false));
                     throw new AccountException(ExceptionEnum.NAME_NOT_ASSOCIATED_WITH_ACCOUNT);
                 }
                 else if (person.IsAuthenticated == false)
                 {
+                    base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, false));
                     throw new AccountException(ExceptionEnum.USER_NOT_LOGGED_IN);
                 }
                 else if (amount > CreditLimit)
                 {
+                    base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, false));
                     throw new AccountException(ExceptionEnum.CREDIT_LIMIT_HAS_BEEN_EXCEEDED);
                 }
                 else
                 {
+                    base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, true));
                     base.Deposit(-amount, person);
                 }
             }
@@ -39,7 +43,7 @@ namespace assignment04.Account
         public void Deposit(double amount, Person person)
         {
             base.Deposit(amount, person);
-            base.OnTransactionOccur(amount, person);
+            base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, true));
         }
         public override void PrepareMonthlyReport()
         {

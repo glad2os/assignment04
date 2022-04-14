@@ -5,8 +5,8 @@ namespace assignment04;
 
 public static class Bank
 {
-    public static readonly Dictionary<string, Account.Account> Accounts;
-    public static readonly Dictionary<string, Person> Users;
+    public static Dictionary<string, Account.Account> Accounts = new();
+    public static Dictionary<string, Person> Users = new();
 
     static Bank()
     {
@@ -25,6 +25,7 @@ public static class Bank
 
         //initialize the ACCOUNTS collection
         AddAccount(new VisaAccount()); //VS-100000
+        //TODO: An item with the same key has already been added. Key: VS--100000
         AddAccount(new VisaAccount(150, -500)); //VS-100001
         AddAccount(new SavingAccount(5000)); //SV-100002
         AddAccount(new SavingAccount()); //SV-100003
@@ -68,7 +69,7 @@ public static class Bank
     {
         if (Users.ContainsKey(name))
             return Users[name];
- 
+
         throw new AccountException(ExceptionEnum.USER_DOES_NOT_EXIST);
     }
 
@@ -76,12 +77,6 @@ public static class Bank
     {
         if (Accounts.ContainsKey(number))
             return Accounts[number];
-        //todo: implement new bankException or make the same as exception ExceptionEnum
-        /*
-         * AccountException(ExceptionEnum)
-         * you trying to pass AccountEnum
-         * explain me it
-         */
         throw new AccountException(ExceptionEnum.ACCOUNT_DOES_NOT_EXIST);
     }
 
@@ -94,20 +89,22 @@ public static class Bank
     {
         foreach (var account in Accounts) Console.WriteLine(account);
     }
+
     public static void AddPerson(string name, string sin)
     {
         var person = new Person(name, sin);
 
         // TODO : Fix logger
-        person.OnLogin += Logger.LoginHandler();
+        // person.OnLogin += Logger.LoginHandler(null, person);
 
         Users.Add(name, person);
     }
 
     public static void AddAccount(Account.Account account)
     {
-        // TODO : Fix logger
-        account.OnTransaction += Logger.TransactionHandler();
+        //TODO: no args represented in the task
+
+        // account.OnTransaction += Logger.TransactionHandler(null, n);
 
         Accounts.Add(account.Number, account);
     }
@@ -120,9 +117,15 @@ public static class Bank
         account.addUser(person);
     }
 
-    public static IEnumerable<Transaction.Transaction> GetAllTransactions()
+    public static List<Transaction.Transaction> GetAllTransactions()
     {
-        //TODO : @IM AN ONION MASON#3695 
-        throw new NotImplementedException();
+        var result = new List<Transaction.Transaction>();
+
+        foreach (var keyValuePair in Accounts)
+        {
+            result.AddRange(keyValuePair.Value.transactions);
+        }
+
+        return result;
     }
 }

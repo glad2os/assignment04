@@ -1,3 +1,6 @@
+using assignment04.Exception;
+using assignment04.Transaction;
+
 namespace assignment04.Account 
 {
 
@@ -27,21 +30,24 @@ namespace assignment04.Account
                     base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, false));
                     throw new AccountException(ExceptionEnum.NAME_NOT_ASSOCIATED_WITH_ACCOUNT);
                 } 
-                else if (person.IsAuthenticated == false) 
+                else
                 {
-                    base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, false));
-                    throw new AccountException(ExceptionEnum.USER_NOT_LOGGED_IN);
-                } 
-                else if (amount > CreditLimit) 
-                {
-                    base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, false));
-                    throw new AccountException(ExceptionEnum.CREDIT_LIMIT_HAS_BEEN_EXCEEDED);
-                } 
-                else 
-                {
-                    base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, true));
-                    base.Deposit(-amount, person);
-                } 
+                    if (person.IsAuthenticated == false) 
+                    {
+                        base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, false));
+                        throw new AccountException(ExceptionEnum.USER_NOT_LOGGED_IN);
+                    }
+                    if (amount > Balance) 
+                    {
+                        base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, false));
+                        throw new AccountException(ExceptionEnum.CREDIT_LIMIT_HAS_BEEN_EXCEEDED);
+                    } 
+                    else 
+                    {
+                        base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, true));
+                        base.Deposit(-amount, person);
+                    }
+                }
             }
         }
 

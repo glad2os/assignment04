@@ -23,6 +23,7 @@ public static class Logger
             Console.WriteLine(loginEvent);
     }
 
+    //TODO: sender is never used
     public static void TransactionHandler(object sender, EventArgs args)
     {
         var argObj = (TransactionEventArgs) args;

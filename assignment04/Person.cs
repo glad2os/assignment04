@@ -8,12 +8,12 @@ public class Person
 {
     private readonly string password;
 
-    public Person(string Name, string Sin)
+    public Person(string name, string sin)
     {
-        this.Name = Name;
-        this.Sin = Sin;
+        Name = name;
+        Sin = sin;
 
-        password = Sin.Substring(0, 3);
+        password = sin[..3];
     }
 
     public string Sin { get; }
@@ -27,17 +27,15 @@ public class Person
         {
             IsAuthenticated = false;
 
-            OnLogin.Invoke(this, new LoginEventArgs(this, false));
+            OnLogin.Invoke(this, new LoginEventArgs(Name, false));
 
             throw new AccountException(ExceptionEnum.PASSWORD_INCORRECT);
         }
 
-        if (this.password == password)
-        {
-            IsAuthenticated = true;
+        if (this.password != password) return;
+        IsAuthenticated = true;
 
-            OnLogin.Invoke(this, new LoginEventArgs(this, true));
-        }
+        OnLogin.Invoke(this, new LoginEventArgs(Name, true));
     }
 
     public void Logout()

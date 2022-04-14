@@ -1,19 +1,19 @@
+using assignment04.Utils;
+
 namespace assignment04.Account;
 
 public abstract class Account
 {
-    private static readonly int LAST_NUMBER = 100_000;
+    private int LAST_NUMBER = 100_000;
     public readonly List<Transaction.Transaction> transactions;
     protected readonly List<Person> users;
 
-    public EventHandler<EventArgs> OnTransaction;
+    public virtual EventHandler<EventArgs> OnTransaction { get; protected internal set; }
 
     public Account(string type, double balance)
     {
         Number = type + "-" + LAST_NUMBER;
         Balance = balance;
-        //TODO: ????
-        OnTransaction = onTransaction;
         LowestBalance = balance;
         transactions = new List<Transaction.Transaction>();
         users = new List<Person>();
@@ -51,17 +51,5 @@ public abstract class Account
     public override string ToString()
     {
         return $"{Number} {users} {Balance:C} {transactions}";
-    }
-
-    public void Purchase(double p0, Person p3)
-    {
-        //TODO: method DoPurchase is not  the Purchase method (from document)
-        throw new NotImplementedException();
-    }
-
-    public void Pay(int p0, Person p1)
-    {
-        //TODO: Pay method is not the same as DoPayment method
-        throw new NotImplementedException();
     }
 }

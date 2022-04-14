@@ -1,22 +1,21 @@
-namespace assignment04;
+using assignment04.Account;
+
+namespace assignment04.Utils;
 
 public class Utils
 {
-    static DayTime _time = new DayTime(1_048_000_000);
-    static Random random = new Random();
-    public static DayTime Time
-    {
-        get => _time += random.Next(1000);
-    }
-    public static DayTime Now
-    {
-        get => _time += 0;
-    }
-    public readonly static Dictionary<AccountType, string> ACCOUNT_TYPES =
-    new Dictionary<AccountType, string>
-    {
-    { AccountType.Checking , "CK" },
-    { AccountType.Saving , "SV" },
-    { AccountType.Visa , "VS" }
-    };
+    private static DayTime _time = new((long) 1_048_000_000);
+    private static readonly Random Random = new();
+
+    public static readonly Dictionary<AccountType, string> AccountTypes =
+        new()
+        {
+            {AccountType.Checking, "CK"},
+            {AccountType.Saving, "SV"},
+            {AccountType.Visa, "VS"}
+        };
+
+    public static DayTime Time => _time += Random.Next(1000);
+
+    public static DayTime Now => _time += 0;
 }

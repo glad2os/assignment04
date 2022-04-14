@@ -1,25 +1,25 @@
-using System.Collections;
 using assignment04.Account;
 using assignment04.Transaction;
+using assignment04.Exception;
 
 namespace assignment04;
 
-    public class Person
+public class Person
+{
+    private readonly string password;
+
+    public Person(string name, string sin)
     {
-    private string password;
-    public event EventHandler OnLogin;
+        Name = name;
+        Sin = sin;
+
+        password = sin[..3];
+    }
 
     public string Sin { get; }
     public string Name { get; }
     public bool IsAuthenticated { get; private set; }
-
-    public Person(string Name, string Sin)
-    {
-        this.Name = Name;
-        this.Sin = Sin;
-
-        password = Sin.Substring(0, 3);
-    }
+    public event EventHandler OnLogin;
 
     public void Login(string password)
     {
@@ -27,23 +27,15 @@ namespace assignment04;
         {
             IsAuthenticated = false;
 
-            OnLogin.Invoke(this, new EventArgs());
+            OnLogin.Invoke(this, new LoginEventArgs(Name, false));
 
-            //TODO: Fix eventArgs
-            LoginEventArgs(this, false);
-
-            throw new AccountException(AccountEnum.PasswordIncorrect);
-
+            throw new AccountException(ExceptionEnum.PASSWORD_INCORRECT);
         }
-        else if (this.password == password)
-        {
-            IsAuthenticated = true;
 
-            OnLogin.Invoke(this, EventArgs.Empty);
-            //TODO: Fix eventArgs
+        if (this.password != password) return;
+        IsAuthenticated = true;
 
-            LoginEventArgs(this, true);
-        }
+        OnLogin.Invoke(this, new LoginEventArgs(Name, true));
     }
 
     public void Logout()

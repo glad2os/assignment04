@@ -1,51 +1,45 @@
 using assignment04.Exception;
+using assignment04.Transaction;
 
-namespace assignment04.Account 
+namespace assignment04.Account;
+
+public class CheckingAccount : Account
 {
+    private const int MONTH = 12;
+    private static double COST_PER_TRANSACTION = 0.05;
+    private static readonly double INTEREST_RATE = 0.005;
+    private bool hasOverdraft;
 
-    public class CheckingAccount : Account
+    public CheckingAccount(double balance = 0, bool hasOverdraft = false) : base("CK-", balance)
     {
-        private static double COST_PER_TRANSACTION = 0.05;
-        private static double INTEREST_RATE = 0.005;
-        private const int Month = 12;
-        private bool hasOverdraft;
+        this.hasOverdraft = hasOverdraft;
+    }
 
-        public CheckingAccount(double balance = 0, bool hasOverdraft = false) : base("CK-", balance)
-        {
-            this.hasOverdraft = hasOverdraft;
-        }
-
-        public void Withdraw(double amount, Person person)
-        {
-            if (!base.IsUser(person.Name))
-            {
+    public void Withdraw(double amount, Person person)
+    {
+        foreach (var item in users)
+            if (person.Name != item.Name)
                 throw new AccountException(ExceptionEnum.NAME_NOT_ASSOCIATED_WITH_ACCOUNT);
-            }
-
-            if (!person.IsAuthenticated)
-            {
+            else if (person.IsAuthenticated == false)
                 throw new AccountException(ExceptionEnum.USER_NOT_LOGGED_IN);
-            }
 
-            if (base.Balance < amount)
-            {
-                throw new AccountException(ExceptionEnum.NO_OVERDRAFT);
-            }
+            else if (amount > Balance)
+                throw new AccountException(ExceptionEnum.CREDIT_LIMIT_HAS_BEEN_EXCEEDED);
+            else
+                base.Deposit(-amount, person);
+    }
 
-            Deposit(amount, person);
+    public void Deposit(double amount, Person person)
+    {
+        base.Deposit(amount, person);
+        base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, true));
+    }
 
-        }
-
-        public void Deposit(double amount, Person person)
-        {
-            base.Deposit(amount, person);
-        }
-        public void PrepareMonthlyStatement()
-        {
-            var serviceFee = base.transactions.Count * COST_PER_TRANSACTION;
-            var interest = base.Balance * (INTEREST_RATE / Month);
-            this.Balance += this.Balance + interest - serviceFee;
-            this.transactions.Clear();
-        }
+    public override void PrepareMonthlyReport()
+    {
+        double interests;
+        interests = INTEREST_RATE * LowestBalance / 12;
+        Balance = Balance - interests;
+        transactions.Clear();
     }
 }

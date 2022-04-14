@@ -2,6 +2,7 @@
 using assignment04.Account;
 
 Console.WriteLine("\nAll accounts:");
+//TODO: throwing NPE
 Bank.PrintAccounts();
 Console.WriteLine("\nAll Users:");
 Bank.PrintPersons();
@@ -31,119 +32,137 @@ p10.Login("234");
 p8.Login("901");
 
 //a visa account
-var a = Bank.GetAccount("VS-100000");
-a.Pay(1500, p0);
-a.Purchase(200, p1);
-a.Purchase(25, p2);
-a.Purchase(15, p0);
-a.Purchase(39, p1);
-a.Pay(400, p0);
-Console.WriteLine(a);
+var a = Bank.GetAccount("VS-100000") as VisaAccount;
 
-a = Bank.GetAccount("VS-100001");
-a.Pay(500, p0);
-a.Purchase(25, p3);
-a.Purchase(20, p4);
-a.Purchase(15, p5);
+if (a != null)
+{
+    a.DoPayment(1500, p0);
+    a.DoPurchase(200, p1);
+    a.DoPurchase(25, p2);
+    a.DoPurchase(15, p0);
+    a.DoPurchase(39, p1);
+    a.DoPayment(400, p0);
+    Console.WriteLine(a);
+}
+
+a = Bank.GetAccount("VS-100001") as VisaAccount;
+a.DoPayment(500, p0);
+a.DoPurchase(25, p3);
+a.DoPurchase(20, p4);
+a.DoPurchase(15, p5);
 Console.WriteLine(a);
 
 //a saving account
 var b = Bank.GetAccount("SV-100002") as SavingAccount;
-b.Withdraw(300, p6);
-b.Withdraw(32.90, p6);
-b.Withdraw(50, p7);
-b.Withdraw(111.11, p8);
-Console.WriteLine(b);
+if (b != null)
+{
+    b.Withdraw(300, p6);
+    b.Withdraw(32.90, p6);
+    b.Withdraw(50, p7);
+    b.Withdraw(111.11, p8);
+    Console.WriteLine(b);
+}
 
 b = Bank.GetAccount("SV-100003") as SavingAccount;
-b.Deposit(300, p3); //ok even though p3 is not a holder
+if (b != null)
+{
+    b.Deposit(300, p3); //ok even though p3 is not a holder
 
 
-b.Deposit(32.90, p2);
-b.Deposit(50, p5);
-b.Withdraw(111.11, p10);
-Console.WriteLine(b);
+    b.Deposit(32.90, p2);
+    b.Deposit(50, p5);
+    b.Withdraw(111.11, p10);
+    Console.WriteLine(b);
 
 //a checking account
-var c = Bank.GetAccount("CK-100004") as CheckingAccount;
-c.Deposit(33.33, p7);
-c.Deposit(40.44, p7);
-c.Withdraw(150, p2);
-c.Withdraw(200, p4);
-c.Withdraw(645, p6);
-c.Withdraw(350, p6);
-Console.WriteLine(c);
+    var c = Bank.GetAccount("CK-100004") as CheckingAccount;
+    if (c != null)
+    {
+        c.Deposit(33.33, p7);
+        c.Deposit(40.44, p7);
+        c.Withdraw(150, p2);
+        c.Withdraw(200, p4);
+        c.Withdraw(645, p6);
+        c.Withdraw(350, p6);
+        Console.WriteLine(c);
+    }
 
-c = Bank.GetAccount("CK-100005") as CheckingAccount;
-c.Deposit(33.33, p8);
-c.Deposit(40.44, p7);
-c.Withdraw(450, p10);
-c.Withdraw(500, p8);
-c.Withdraw(645, p10);
-c.Withdraw(850, p10);
-Console.WriteLine(c);
+    c = Bank.GetAccount("CK-100005") as CheckingAccount;
+    if (c != null)
+    {
+        c.Deposit(33.33, p8);
+        c.Deposit(40.44, p7);
+        c.Withdraw(450, p10);
+        c.Withdraw(500, p8);
+        c.Withdraw(645, p10);
+        c.Withdraw(850, p10);
+        Console.WriteLine(c);
 
-a = Bank.GetAccount("VS-100006") as VisaAccount;
-a.Pay(700, p0);
-a.Purchase(20, p3);
-a.Purchase(10, p1);
-a.Purchase(15, p1);
-Console.WriteLine(a);
+        a = Bank.GetAccount("VS-100006") as VisaAccount;
+        if (a != null)
+        {
+            a.DoPayment(700, p0);
+            a.DoPurchase(20, p3);
+            a.DoPurchase(10, p1);
+            a.DoPurchase(15, p1);
+            Console.WriteLine(a);
 
-b = Bank.GetAccount("SV-100007") as SavingAccount;
-b.Deposit(300, p3); //ok even though p3 is not a holder
-b.Deposit(32.90, p2);
-b.Deposit(50, p5);
-b.Withdraw(111.11, p7);
-Console.WriteLine(b);
+            b = Bank.GetAccount("SV-100007") as SavingAccount;
+            b.Deposit(300, p3); //ok even though p3 is not a holder
+            b.Deposit(32.90, p2);
+            b.Deposit(50, p5);
+            b.Withdraw(111.11, p7);
+            Console.WriteLine(b);
 
-Console.WriteLine("\n\nExceptions:");
+            Console.WriteLine("\n\nExceptions:");
 //The following will cause exception
-try
-{
-    p8.Login("911"); //incorrect password
-}
-catch (AccountException e)
-{
-    Console.WriteLine(e.Message);
-}
+            try
+            {
+                p8.Login("911"); //incorrect password
+            }
+            catch (AccountException e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
-try
-{
-    p3.Logout();
-    a.Purchase(12.5, p3); //exception user is not logged in
-}
-catch (AccountException e)
-{
-    Console.WriteLine(e.Message);
-}
+            try
+            {
+                p3.Logout();
+                a.DoPurchase(12.5, p3); //exception user is not logged in
+            }
+            catch (AccountException e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
-try
-{
-    a.Purchase(12.5, p0); //user is not associated with this account
-}
+            try
+            {
+                a.DoPurchase(12.5, p0); //user is not associated with this account
+            }
+            catch (AccountException e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
-catch (AccountException e)
-{
-    Console.WriteLine(e.Message);
-}
+            try
+            {
+                a.DoPurchase(5825, p4); //credit limit exceeded
+            }
+            catch (AccountException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
 
-try
-{
-    a.Purchase(5825, p4); //credit limit exceeded
-}
-catch (AccountException e)
-{
-    Console.WriteLine(e.Message);
-}
-
-try
-{
-    c.Withdraw(1500, p6); //no overdraft
-}
-catch (AccountException e)
-{
-    Console.WriteLine(e.Message);
+        try
+        {
+            c.Withdraw(1500, p6); //no overdraft
+        }
+        catch (AccountException e)
+        {
+            Console.WriteLine(e.Message);
+        }
+    }
 }
 
 try
@@ -168,14 +187,13 @@ catch (AccountException e)
 Console.WriteLine("\n\nAll transactions");
 foreach (var transaction in Bank.GetAllTransactions())
     Console.WriteLine(transaction);
-
 foreach (var account in Bank.Accounts.Select(keyValuePair => keyValuePair.Value))
 {
     Console.WriteLine("\nBefore PrepareMonthlyReport()");
     Console.WriteLine(account);
 
     Console.WriteLine("\nAfter PrepareMonthlyReport()");
-    Account.PrepareMonthlyReport(); //all transactions are cleared, balance changes
+    account.PrepareMonthlyReport(); //all transactions are cleared, balance changes
     Console.WriteLine(account);
 }
 

@@ -1,38 +1,58 @@
 using assignment04.Exception;
+using assignment04.Transaction;
 
-namespace assignment04.Account 
-{ 
-
-public class SavingAccount : Account
+namespace assignment04.Account
 {
-    private static double COST_PER_TRANSACTION = 0.05;
-    private static double INTEREST_RATE = 0.015;
-    private const int MONTH = 12;
-
-    public SavingAccount(double balance = 0) : base("SV-", balance)
+    public class SavingAccount : Account
     {
-        Balance = balance;
-    }
+        private static double COST_PER_TRANSACTION = 0.05;
+        private static double INTEREST_RATE = 0.015;
+        private const int MONTH = 12;
 
-    public void Withdraw(double amount, Person person)
-    {
-        if (!this.IsUser(person.Name)) throw new AccountException(ExceptionEnum.NAME_NOT_ASSOCIATED_WITH_ACCOUNT);
-        if (!person.IsAuthenticated) throw new AccountException(ExceptionEnum.USER_NOT_LOGGED_IN);
-        if (this.Balance < amount) throw new AccountException(ExceptionEnum.CREDIT_LIMIT_HAS_BEEN_EXCEEDED);
-        base.Deposit(-amount, person);
+        public SavingAccount(double balance = 0) : base("SV-", balance)
+        {
+            Balance = balance;
+        }
 
-    }
+        public void Withdraw(double amount, Person person)
+        {
+            foreach (var item in base.users)
+            {
+                if (person.Name != item.Name)
+                {
+                    base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, false));
+                    throw new AccountException(ExceptionEnum.NAME_NOT_ASSOCIATED_WITH_ACCOUNT);
+                }
 
-    public void Deposit(double amount, Person person)
-    {
-        base.Deposit(amount, person);
+                if (person.IsAuthenticated == false)
+                {
+                    base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, false));
+                    throw new AccountException(ExceptionEnum.USER_NOT_LOGGED_IN);
+                }
+
+                if (amount > Balance)
+                {
+                    base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, false));
+                    throw new AccountException(ExceptionEnum.CREDIT_LIMIT_HAS_BEEN_EXCEEDED);
+                }
+
+                base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, true));
+                base.Deposit(-amount, person);
+            }
+        }
+
+        public void Deposit(double amount, Person person)
+        {
+            base.Deposit(amount, person);
+            base.OnTransactionOccur(this, new TransactionEventArgs(person.ToString(), amount, true));
+        }
+
+        public override void PrepareMonthlyReport()
+        {
+            double interests;
+            interests = INTEREST_RATE * LowestBalance / 12;
+            Balance = Balance - interests;
+            transactions.Clear();
+        }
     }
-    public void PrepareMonthlyStatement()
-    {
-        var serviceFee = this.transactions.Count * COST_PER_TRANSACTION;
-        var interest = this.LowestBalance * (INTEREST_RATE / MONTH);
-        this.Balance += interest - serviceFee;
-        this.transactions.Clear();
-    }
- }
 }

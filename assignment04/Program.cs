@@ -1,8 +1,8 @@
 ﻿using assignment04;
 using assignment04.Account;
+#pragma warning disable CS8600
 
 Console.WriteLine("\nAll accounts:");
-//TODO: throwing NPE
 Bank.PrintAccounts();
 Console.WriteLine("\nAll Users:");
 Bank.PrintPersons();
@@ -32,9 +32,8 @@ p10.Login("234");
 p8.Login("901");
 
 //a visa account
-var a = Bank.GetAccount("VS-100000") as VisaAccount;
 
-if (a != null)
+if (Bank.GetAccount("VS-100000") is VisaAccount a)
 {
     a.DoPayment(1500, p0);
     a.DoPurchase(200, p1);
@@ -45,7 +44,7 @@ if (a != null)
     Console.WriteLine(a);
 }
 
-a = Bank.GetAccount("VS-100001") as VisaAccount;
+a = (Bank.GetAccount("VS-100001") as VisaAccount)!;
 a.DoPayment(500, p0);
 a.DoPurchase(25, p3);
 a.DoPurchase(20, p4);
@@ -53,8 +52,7 @@ a.DoPurchase(15, p5);
 Console.WriteLine(a);
 
 //a saving account
-var b = Bank.GetAccount("SV-100002") as SavingAccount;
-if (b != null)
+if (Bank.GetAccount("SV-100002") is SavingAccount b)
 {
     b.Withdraw(300, p6);
     b.Withdraw(32.90, p6);
@@ -75,8 +73,7 @@ if (b != null)
     Console.WriteLine(b);
 
 //a checking account
-    var c = Bank.GetAccount("CK-100004") as CheckingAccount;
-    if (c != null)
+if (Bank.GetAccount("CK-100004") is CheckingAccount c)
     {
         c.Deposit(33.33, p7);
         c.Deposit(40.44, p7);
@@ -108,7 +105,7 @@ if (b != null)
             Console.WriteLine(a);
 
             b = Bank.GetAccount("SV-100007") as SavingAccount;
-            b.Deposit(300, p3); //ok even though p3 is not a holder
+            b!.Deposit(300, p3); //ok even though p3 is not a holder
             b.Deposit(32.90, p2);
             b.Deposit(50, p5);
             b.Withdraw(111.11, p7);

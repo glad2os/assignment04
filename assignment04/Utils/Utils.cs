@@ -7,7 +7,7 @@ public class Utils
     private static DayTime _time = new((long) 1_048_000_000);
     private static readonly Random Random = new();
 
-    public static readonly Dictionary<AccountType, string> AccountTypes =
+    public static readonly Dictionary<AccountType, string> ACCOUNT_TYPE =
         new()
         {
             {AccountType.Checking, "CK"},

@@ -4,8 +4,8 @@ namespace assignment04;
 
 public static class Logger
 {
-    private static List<string> loginEvents;
-    private static List<string> transactionEvents;
+    private static List<string> loginEvents = new();
+    private static List<string> transactionEvents = new();
 
     public static void ShowTransactionEvents()
     {
@@ -23,27 +23,34 @@ public static class Logger
             Console.WriteLine(loginEvent);
     }
 
-    //TODO: sender is never used
-    public static void TransactionHandler(object sender, EventArgs args)
+    public static void TransactionHandler(object? sender, EventArgs args)
     {
-        var argObj = (TransactionEventArgs) args;
+        var argObj = args as TransactionEventArgs;
+
+        if (argObj == null)
+            throw new System.Exception("TransactionEventArgs is null");
 
         var str = $"PersonName={argObj.PersonName} ";
         str += $"Amount ={argObj.Amount} ";
-        //TODO: THE OPERATION METHOD IS NOT IMPLEMENTED IN THE DOCUMENT!!!!
-        // str += $"Operation ={argObj.Operation} ";
+        var operation = argObj.Amount > 0 ? '+' : '-';
+        str += $"Operation ={operation}";
         str += $"Success ={argObj.Success} ";
         str += $"Current time ={Utils.Utils.Time} ";
         transactionEvents.Add(str);
     }
 
-    public static void LoginHandler(object sender, EventArgs args)
+    public static void LoginHandler(object? sender, EventArgs args)
     {
-        var objectArgs = (LoginEventArgs) args;
+        var objectArgs = args as LoginEventArgs;
+
         var str = string.Empty;
+
+        if (objectArgs == null)
+            throw new System.Exception("LoginEventArgs is null");
+
         str += $"PersonName={objectArgs.PersonName}";
         str += $"Success ={objectArgs.Success} ";
-        str += $"Current time ={Utils.Utils.Time} ";
+        str += $"Current time ={Utils.Utils.Now} ";
         loginEvents.Add(str);
     }
 }

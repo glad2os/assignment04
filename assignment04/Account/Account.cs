@@ -1,18 +1,18 @@
+using System.Text;
 using assignment04.Utils;
 
 namespace assignment04.Account;
 
 public abstract class Account
 {
-    private int LAST_NUMBER = 100_000;
+    private static int LAST_NUMBER = 100_000;
     public readonly List<Transaction.Transaction> transactions;
     protected readonly List<Person> users;
-
     public virtual EventHandler<EventArgs> OnTransaction { get; protected internal set; }
 
     public Account(string type, double balance)
     {
-        Number = type + "-" + LAST_NUMBER;
+        Number = type + LAST_NUMBER++;
         Balance = balance;
         LowestBalance = balance;
         transactions = new List<Transaction.Transaction>();
@@ -50,6 +50,6 @@ public abstract class Account
 
     public override string ToString()
     {
-        return $"{Number} {users} {Balance:C} {transactions}";
+        return $"{Number} \n\t{string.Join("\n\t", users)}\n {Balance:C} \n\t{string.Join("\n\t", transactions)}";
     }
 }

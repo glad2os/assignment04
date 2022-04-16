@@ -6,7 +6,7 @@ namespace assignment04;
 
 public class Person
 {
-    private readonly string password;
+    private string password;
 
     public Person(string name, string sin)
     {
@@ -19,7 +19,7 @@ public class Person
     public string Sin { get; }
     public string Name { get; }
     public bool IsAuthenticated { get; private set; }
-    public event EventHandler OnLogin;
+    public event EventHandler<LoginEventArgs> OnLogin;
 
     public void Login(string password)
     {
@@ -32,7 +32,6 @@ public class Person
             throw new AccountException(ExceptionEnum.PASSWORD_INCORRECT);
         }
 
-        if (this.password != password) return;
         IsAuthenticated = true;
 
         OnLogin.Invoke(this, new LoginEventArgs(Name, true));
@@ -45,6 +44,6 @@ public class Person
 
     public override string ToString()
     {
-        return $"{Name} is {(IsAuthenticated ? "" : "not")} Authenticated.";
+        return $"{Name} is{(IsAuthenticated ? "" : " not")} Authenticated.";
     }
 }
